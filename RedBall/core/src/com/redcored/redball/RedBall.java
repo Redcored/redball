@@ -34,4 +34,9 @@ public class RedBall extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		renderer.resize(width, height);
 	}
+
+	@Override
+	public void dispose() {
+		renderer.dispose();
+	}
 }
