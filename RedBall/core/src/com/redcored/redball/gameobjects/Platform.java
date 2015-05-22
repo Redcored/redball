@@ -10,8 +10,8 @@ import com.redcored.redball.GameWorld;
  * Created by Ipismai on 22.5.2015.
  */
 public class Platform extends GameObject {
-    private final float width = 3.5f;
-    private final float height = 0.5f;
+    private final float width = 30f;
+    private final float height = 1f;
 
     public Platform(GameWorld world) {
         super(world);

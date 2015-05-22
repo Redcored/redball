@@ -1,5 +1,7 @@
 package com.redcored.redball.util;
 
+import com.badlogic.gdx.Gdx;
+
 /**
  * Created by Ipismai on 22.5.2015.
  *
@@ -48,7 +50,7 @@ public class StepBasedUpdater {
      * @param elapsedTime Time elapsed in seconds since last call to the function.
      */
     public void addTime(float elapsedTime) {
-        accumulator += elapsedTime;
+        accumulator = Math.min(accumulator + elapsedTime, (float) maximumIterations * updateLength);
         while (accumulator >= updateLength) {
             target.update(updateLength);
             accumulator -= updateLength;
@@ -59,7 +61,7 @@ public class StepBasedUpdater {
      * @return A value between 0 and 1 indicating how far into the next update this Updater is.
      */
     public float getInterpolation() {
-        return accumulator;
+        return accumulator / updateLength;
     }
 
 }

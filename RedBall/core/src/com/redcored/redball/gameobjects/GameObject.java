@@ -41,8 +41,8 @@ public abstract class GameObject implements UpdateTarget {
         sprite = createSprite();
 
         // Setting the transforms based on the physics body.
-        currentPosition = physicsBody.getTransform();
-        oldPosition = currentPosition;
+        currentPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
+        oldPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
     }
 
     @Override
@@ -54,7 +54,9 @@ public abstract class GameObject implements UpdateTarget {
      * Used by this object's owner to update it's member variables after a physics update.
      */
     public void postPhysicsUpdate() {
-        oldPosition = currentPosition;
+        //Gdx.app.log("Positions", currentPosition.getPosition().x + " - " + physicsBody.getTransform().getPosition().x);
+        oldPosition.setPosition(currentPosition.getPosition());
+        oldPosition.setRotation(currentPosition.getRotation());
         currentPosition = physicsBody.getTransform();
     }
 
@@ -64,8 +66,9 @@ public abstract class GameObject implements UpdateTarget {
      */
     public void setPosition(Vector2 position) {
         physicsBody.setTransform(position, currentPosition.getRotation());
+        oldPosition.setPosition(currentPosition.getPosition());
+        oldPosition.setRotation(currentPosition.getRotation());
         currentPosition = physicsBody.getTransform();
-        oldPosition = currentPosition;
     }
 
     public Vector2 getPosition() {
@@ -86,18 +89,17 @@ public abstract class GameObject implements UpdateTarget {
 
     public Sprite getSprite(float interpolation) {
 
-        Vector2 renderPosition = oldPosition.getPosition().interpolate(
-            currentPosition.getPosition(),
-            interpolation,
-            Interpolation.linear
-        );
+        float renderX = oldPosition.getPosition().x * (1.0f - interpolation) +
+                currentPosition.getPosition().x * interpolation - sprite.getWidth() / 2.0f;
+        float renderY = oldPosition.getPosition().y * (1.0f - interpolation) +
+                currentPosition.getPosition().y * interpolation - sprite.getHeight() / 2.0f;
 
-        renderPosition.add(-sprite.getWidth()/2, -sprite.getHeight()/2);
+        // TODO: Improve rotation interpolation
+        float renderRotation = oldPosition.getRotation();
+                //* (1.0f - interpolation) +
+                //currentPosition.getRotation() * interpolation;
 
-        float renderRotation = oldPosition.getRotation() * (1.0f - interpolation) -
-            currentPosition.getRotation() * interpolation;
-
-        sprite.setPosition(renderPosition.x, renderPosition.y);
+        sprite.setPosition(renderX, renderY);
         sprite.setRotation((float) Math.toDegrees(renderRotation));
 
         return sprite;

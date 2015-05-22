@@ -18,14 +18,14 @@ public class RedBall extends ApplicationAdapter {
 		renderer = new Renderer(gameWorld);
 
 		// Creating the updater.
-		worldUpdater = new StepBasedUpdater(gameWorld, 100);
+		worldUpdater = new StepBasedUpdater(gameWorld, 30);
 	}
 
 	@Override
 	public void render () {
 		float deltaTime = Gdx.graphics.getDeltaTime();
         worldUpdater.addTime(deltaTime);
-		renderer.render(deltaTime);
+		renderer.render(worldUpdater.getInterpolation());
 	}
 
 	@Override
