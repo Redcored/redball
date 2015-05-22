@@ -3,9 +3,10 @@ package com.redcored.redball;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.redcored.redball.gameobjects.GameObject;
 
 /**
  * Created by Ville on 21.5.2015.
@@ -13,11 +14,13 @@ import com.badlogic.gdx.utils.Disposable;
 public class Renderer implements Disposable {
     private OrthographicCamera camera;
     private SpriteBatch batch;
+    private Box2DDebugRenderer debugRenderer;
 
-    private World world;
+    private GameWorld gameWorld;
 
-    public Renderer(World world) {
-        this.world = world;
+    public Renderer(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
+        debugRenderer = new Box2DDebugRenderer();
         init();
     }
 
@@ -29,24 +32,27 @@ public class Renderer implements Disposable {
         camera.update();
     }
 
-    public void render(float deltaTime) {
-
-        // Clearing the screen before rendering.
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        renderTestObjects();
-    }
-
     @Override
     public void dispose() {
         batch.dispose();
     }
 
-    private void renderTestObjects() {
+    public void render(float alpha) {
+        // Clearing the screen before rendering.
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        renderGameWorld(alpha);
+
+        // Comment out this line to use Box2D debug rendering.
+        //debugRenderer.render(gameWorld.getPhysics(), camera.combined);
+    }
+
+    private void renderGameWorld(float alpha) {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        for (Sprite sprite : world.testSprites) {
-            sprite.draw(batch);
+
+        for (GameObject o : gameWorld.getGameObjects()) {
+            o.getSprite(alpha).draw(batch);
         }
         batch.end();
     }

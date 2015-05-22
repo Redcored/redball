@@ -2,24 +2,23 @@ package com.redcored.redball;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.redcored.redball.util.StepBasedUpdater;
 
 import static com.badlogic.gdx.Application.LOG_DEBUG;
 
 public class RedBall extends ApplicationAdapter {
-	World world;
+	GameWorld gameWorld;
 	StepBasedUpdater worldUpdater;
 	Renderer renderer;
 
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(LOG_DEBUG);
-		world = new World();
-		renderer = new Renderer(world);
+		gameWorld = new GameWorld();
+		renderer = new Renderer(gameWorld);
 
 		// Creating the updater.
-		worldUpdater = new StepBasedUpdater(world, 60);
+		worldUpdater = new StepBasedUpdater(gameWorld, 100);
 	}
 
 	@Override
