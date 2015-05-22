@@ -31,6 +31,7 @@ public class Platform extends GameObject {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2.0f, height / 2.0f);
 
+        // 3. Creating the fixture.
         FixtureDef platformFixtureDef = new FixtureDef();
         platformFixtureDef.shape = shape;
         platformFixtureDef.density = 0.5f;

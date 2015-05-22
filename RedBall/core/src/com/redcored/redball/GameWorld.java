@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.redcored.redball.gameobjects.Box;
 import com.redcored.redball.gameobjects.GameObject;
 import com.redcored.redball.gameobjects.Platform;
+import com.redcored.redball.gameobjects.Player;
 import com.redcored.redball.util.UpdateTarget;
 
 /**
@@ -32,9 +33,10 @@ public class GameWorld implements UpdateTarget {
     }
 
     private void generateDemoScene() {
+        GameObject o;
         // Creating the objects at random positions.
         for (int i = 0; i < 5; i++) {
-            GameObject o = new Box(this);
+            o = new Box(this);
 
             float randomX = MathUtils.random(-2.0f, 2.0f);
             float randomY = MathUtils.random(-2.0f, 2.0f);
@@ -43,7 +45,11 @@ public class GameWorld implements UpdateTarget {
             objects.add(o);
         }
 
-        GameObject o = new Platform(this);
+        o = new Player(this);
+        o.setPosition(new Vector2(0f, 3f));
+        objects.add(o);
+
+        o = new Platform(this);
         o.setPosition(new Vector2(-0f, -2f));
         objects.add(o);
     }
