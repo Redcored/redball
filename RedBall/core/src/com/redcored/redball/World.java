@@ -1,14 +1,16 @@
 package com.redcored.redball;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.redcored.redball.util.UpdateTarget;
 
 /**
  * Created by Ville on 21.5.2015.
  */
-public class World {
+public class World implements UpdateTarget{
     public Sprite[] testSprites;
     public int selectedSprite;
 
@@ -20,6 +22,7 @@ public class World {
         initTestObjects();
     }
 
+    @Override
     public void update(float deltaTime) {
         updateTestObjects(deltaTime);
     }
@@ -70,6 +73,7 @@ public class World {
 
 
     private void updateTestObjects(float deltaTime) {
+
         // Get current rotation from selected sprite
         float rotation = testSprites[selectedSprite].getRotation();
         // Rotate sprite by 90 degrees per second

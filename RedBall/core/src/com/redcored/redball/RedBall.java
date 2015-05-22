@@ -3,11 +3,13 @@ package com.redcored.redball;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.redcored.redball.util.StepBasedUpdater;
 
 import static com.badlogic.gdx.Application.LOG_DEBUG;
 
 public class RedBall extends ApplicationAdapter {
 	World world;
+	StepBasedUpdater worldUpdater;
 	Renderer renderer;
 
 	@Override
@@ -15,19 +17,16 @@ public class RedBall extends ApplicationAdapter {
 		Gdx.app.setLogLevel(LOG_DEBUG);
 		world = new World();
 		renderer = new Renderer(world);
+
+		// Creating the updater.
+		worldUpdater = new StepBasedUpdater(world, 60);
 	}
 
 	@Override
 	public void render () {
-		world.update(Gdx.graphics.getDeltaTime());
-
-		Gdx.gl.glClearColor(0x64/255.0f, 0x95/255.0f, 0xed/255.0f, 0xff/255.0f);
-
-		// Clears the screen
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		renderer.render();
-
+		float deltaTime = Gdx.graphics.getDeltaTime();
+        worldUpdater.addTime(deltaTime);
+		renderer.render(deltaTime);
 	}
 
 	@Override
