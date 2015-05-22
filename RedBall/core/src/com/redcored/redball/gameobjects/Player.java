@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.redcored.redball.Constants;
 import com.redcored.redball.GameWorld;
 
 /**
@@ -16,6 +17,7 @@ public class Player extends GameObject {
 
     final float radius = 0.6f;
     final float acceleration = 6f;
+    final Vector2 startPosition = new Vector2(0f, -5f);
 
     public Player(GameWorld world) {
         super(world);
@@ -23,14 +25,17 @@ public class Player extends GameObject {
 
     @Override
     public void update(float tickDuration) {
+        // Check if player is out of game area
+        if (isOutOfGameArea()) {
+            resetPlayer();
+        }
 
         // Phone input.
-        Gdx.app.log("Accelerometer", " Value: " +Gdx.input.getAccelerometerX());
-        this.getPhysicsBody().applyForceToCenter(-acceleration * Gdx.input.getAccelerometerX()/2f, 0, true);
+        Gdx.app.log("Accelerometer", " Value: " + Gdx.input.getAccelerometerX());
+        this.getPhysicsBody().applyForceToCenter(-acceleration * Gdx.input.getAccelerometerX() / 2f, 0, true);
 
         if (Gdx.input.isTouched()) {
-            this.setPosition(new Vector2(0, -5));
-            this.getPhysicsBody().setLinearVelocity(0, 7);
+            resetPlayer();
         }
 
 
@@ -42,9 +47,20 @@ public class Player extends GameObject {
             this.getPhysicsBody().applyForceToCenter(acceleration, 0, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            this.setPosition(new Vector2(0, -5));
-            this.getPhysicsBody().setLinearVelocity(0, 7);
+            resetPlayer();
         }
+    }
+
+    private boolean isOutOfGameArea() {
+        float x = this.getPosition().x;
+        float y = this.getPosition().y;
+        return (x < -Constants.VIEWPORT_WIDTH/2 || x > Constants.VIEWPORT_WIDTH/2 ||
+                y < -Constants.VIEWPORT_HEIGHT/2 || y > Constants.VIEWPORT_HEIGHT/2);
+    }
+
+    private void resetPlayer() {
+        this.setPosition(startPosition);
+        this.getPhysicsBody().setLinearVelocity(0, 7);
     }
 
     @Override
