@@ -34,7 +34,6 @@ public class BoxTemplate {
         fixtureDef.shape = shape;
 
         body.createFixture(fixtureDef);
-        body.setGravityScale(-0.2f);
 
         return body;
     }

@@ -32,7 +32,6 @@ public class PlayerTemplate {
         fixtureDef.shape = shape;
 
         body.createFixture(fixtureDef);
-        body.setGravityScale(0.6f);
 
         return body;
     }

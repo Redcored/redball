@@ -16,6 +16,7 @@ public class GameObjectFactory {
         GameObject box = new GameObject();
         box.setGameWorld(gameWorld);
         box.setPhysicsBody(BoxTemplate.createPhysicsBody(gameWorld.getPhysics(), width, height));
+        box.getPhysicsBody().setGravityScale(-0.2f);
         box.setSprite(BoxTemplate.createSprite(width, height));
         return box;
     }
@@ -25,6 +26,7 @@ public class GameObjectFactory {
         player.setGameWorld(gameWorld);
         player.setPhysicsBody(PlayerTemplate.createPhysicsBody(gameWorld.getPhysics(), radius));
         player.setSprite(PlayerTemplate.createSprite(radius));
+        player.getPhysicsBody().setGravityScale(0.6f);
         return player;
     }
 }
