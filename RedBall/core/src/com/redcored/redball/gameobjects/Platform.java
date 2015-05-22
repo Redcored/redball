@@ -15,9 +15,10 @@ public class Platform extends GameObject {
 
     public Platform(GameWorld world) {
         super(world);
+        setPhysicsBody(createPhysicsBody());
+        setSprite(createSprite());
     }
 
-    @Override
     Body createPhysicsBody() {
 
         // 1. Creating the body definition.
@@ -43,7 +44,6 @@ public class Platform extends GameObject {
         return body;
     }
 
-    @Override
     Sprite createSprite() {
         int sw = (int) (32 * width);
         int sh = (int) (32 * height);

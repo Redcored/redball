@@ -17,7 +17,7 @@ import com.redcored.redball.util.UpdateTarget;
  * A basic GameObject class that should be used to implement actual the actual objects of the game.
  * Contains a sprite and a physics body which are managed by the owner of this object.
  */
-public abstract class GameObject implements UpdateTarget {
+public class GameObject implements UpdateTarget {
 
     // GameWorld this object belongs to.
     private GameWorld gameWorld;
@@ -32,23 +32,12 @@ public abstract class GameObject implements UpdateTarget {
     // Graphics data
     private Sprite sprite;
 
-
-    public GameObject(GameWorld world) {
+    protected GameObject(GameWorld world) {
         gameWorld = world;
-
-        // Creating the sprite and the body.
-        physicsBody = createPhysicsBody();
-        sprite = createSprite();
-
-        // Setting the transforms based on the physics body.
-        currentPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
-        oldPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
     }
 
     @Override
-    public void update(float updateStepLength) {};
-    abstract Body createPhysicsBody();
-    abstract Sprite createSprite();
+    public void update(float updateStepLength) {}
 
     /**
      * Used by this object's owner to update it's member variables after a physics update.
@@ -75,12 +64,16 @@ public abstract class GameObject implements UpdateTarget {
         return currentPosition.getPosition();
     }
 
-    public void setPhysics(Body newPhysicsBody) {
-        physicsBody = newPhysicsBody;
-    }
 
     public void setSprite(Sprite newSprite) {
         sprite = newSprite;
+    }
+
+    public void setPhysicsBody(Body newPhysicsBody) {
+        physicsBody = newPhysicsBody;
+        // Setting the transforms based on the physics body.
+        currentPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
+        oldPosition = new Transform(physicsBody.getPosition(), physicsBody.getAngle());
     }
 
     public Body getPhysicsBody() {

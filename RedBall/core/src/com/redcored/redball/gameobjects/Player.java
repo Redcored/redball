@@ -21,6 +21,8 @@ public class Player extends GameObject {
 
     public Player(GameWorld world) {
         super(world);
+        setPhysicsBody(createPhysicsBody());
+        setSprite(createSprite());
     }
 
     @Override
@@ -63,7 +65,6 @@ public class Player extends GameObject {
         this.getPhysicsBody().setLinearVelocity(0, 7);
     }
 
-    @Override
     Body createPhysicsBody() {
         // 1. Creating the body definition.
         BodyDef bDef = new BodyDef();
@@ -88,7 +89,6 @@ public class Player extends GameObject {
         return body;
     }
 
-    @Override
     Sprite createSprite() {
         int size = (int)(256*radius);
         Pixmap pixmap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
