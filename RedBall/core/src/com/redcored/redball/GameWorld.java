@@ -18,15 +18,13 @@ import com.redcored.redball.util.UpdateTarget;
  * Created by Ville on 21.5.2015.
  */
 public class GameWorld implements UpdateTarget {
-    public Sprite[] testSprites;
-    public int selectedSprite;
-
-
     private World physics;
     public Array<GameObject> objects = new Array<GameObject>();
 
+    private float boxSpawn = 0.0f;
+
     public GameWorld() {
-        physics = new World(new Vector2(0.0f, -9.81f), true);
+        physics = new World(new Vector2(0.0f, -3.81f), true);
         objects = new Array<GameObject>();
 
         generateDemoScene();
@@ -49,13 +47,22 @@ public class GameWorld implements UpdateTarget {
         o.setPosition(new Vector2(0f, 3f));
         objects.add(o);
 
-        o = new Platform(this);
-        o.setPosition(new Vector2(-0f, -2f));
-        objects.add(o);
     }
 
     @Override
     public void update(float tickDuration) {
+        // Spawning new boxes!
+        boxSpawn += tickDuration;
+
+        if (boxSpawn >= 1.5f) {
+            GameObject o = new Box(this);
+            o.getPhysicsBody().applyForceToCenter(0, MathUtils.random(0f, 100f), true);
+            float randomX = MathUtils.random(-4.0f, 4.0f);
+            o.setPosition(new Vector2(randomX, -5f));
+            objects.add(o);
+            boxSpawn -= MathUtils.random(0.5f, 1.5f);
+        }
+
         // Updating each object before the physics step.
         for (GameObject o : objects) { o.update(tickDuration); }
 
@@ -64,6 +71,7 @@ public class GameWorld implements UpdateTarget {
 
         // Performing the location updates etc after physics tick.
         for (GameObject o : objects) { o.postPhysicsUpdate(); }
+
     }
 
     public World getPhysics() {

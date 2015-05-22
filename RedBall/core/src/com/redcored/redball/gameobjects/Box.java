@@ -21,13 +21,6 @@ public class Box extends GameObject {
     }
 
     @Override
-    public void update(float updateStepLength) {
-        if (Gdx.input.isButtonPressed(Input.Keys.W)) {
-            this.getPhysicsBody().applyForceToCenter(0, 20, true);
-        }
-    }
-
-    @Override
     Body createPhysicsBody() {
 
         // 1. Creating the body definition.
@@ -45,9 +38,10 @@ public class Box extends GameObject {
         boxFixtureDef.shape = shape;
         boxFixtureDef.density = 0.5f;
         boxFixtureDef.friction = 0.4f;
-        boxFixtureDef.restitution = 0.6f;
+        boxFixtureDef.restitution = 0.2f;
 
         body.createFixture(boxFixtureDef);
+        body.setGravityScale(-0.2f);
 
         return body;
     }

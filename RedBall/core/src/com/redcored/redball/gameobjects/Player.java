@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.redcored.redball.GameWorld;
 
@@ -14,7 +15,7 @@ import com.redcored.redball.GameWorld;
 public class Player extends GameObject {
 
     final float radius = 0.6f;
-    final float acceleration = 10f;
+    final float acceleration = 6f;
 
     public Player(GameWorld world) {
         super(world);
@@ -22,17 +23,27 @@ public class Player extends GameObject {
 
     @Override
     public void update(float tickDuration) {
+
+        // Phone input.
+        Gdx.app.log("Accelerometer", " Value: " +Gdx.input.getAccelerometerX());
+        this.getPhysicsBody().applyForceToCenter(-acceleration * Gdx.input.getAccelerometerX()/2f, 0, true);
+
+        if (Gdx.input.isTouched()) {
+            this.setPosition(new Vector2(0, -5));
+            this.getPhysicsBody().setLinearVelocity(0, 7);
+        }
+
+
+        // Keyboard input
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             this.getPhysicsBody().applyForceToCenter(-acceleration, 0, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.getPhysicsBody().applyForceToCenter(acceleration, 0, true);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.getPhysicsBody().applyForceToCenter(0, acceleration, true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            this.getPhysicsBody().applyForceToCenter(0, -acceleration, true);
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            this.setPosition(new Vector2(0, -5));
+            this.getPhysicsBody().setLinearVelocity(0, 7);
         }
     }
 
@@ -52,9 +63,9 @@ public class Player extends GameObject {
         // 3. Creating the fixture.
         FixtureDef platformFixtureDef = new FixtureDef();
         platformFixtureDef.shape = shape;
-        platformFixtureDef.density = 0.5f;
+        platformFixtureDef.density = 0.3f;
         platformFixtureDef.friction = 0.4f;
-        platformFixtureDef.restitution = 0.6f;
+        platformFixtureDef.restitution = 0.2f;
 
         body.createFixture(platformFixtureDef);
 
