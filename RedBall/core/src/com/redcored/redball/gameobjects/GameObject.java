@@ -32,9 +32,7 @@ public class GameObject implements UpdateTarget {
     // Graphics data
     private Sprite sprite;
 
-    protected GameObject(GameWorld world) {
-        gameWorld = world;
-    }
+    protected GameObject() {}
 
     @Override
     public void update(float updateStepLength) {}
@@ -58,6 +56,10 @@ public class GameObject implements UpdateTarget {
         oldPosition.setPosition(currentPosition.getPosition());
         oldPosition.setRotation(currentPosition.getRotation());
         currentPosition = physicsBody.getTransform();
+    }
+
+    public void setGameWorld(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
     }
 
     public Vector2 getPosition() {

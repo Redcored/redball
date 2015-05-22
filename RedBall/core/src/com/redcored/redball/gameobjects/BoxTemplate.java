@@ -11,43 +11,35 @@ import com.redcored.redball.GameWorld;
 /**
  * Created by Ipismai on 22.5.2015.
  */
-public class Box extends GameObject {
+public class BoxTemplate {
+    static BodyDef bodyDef;
+    static FixtureDef fixtureDef;
+    static {
+        bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(0, 0);
 
-    private final float width = 1.5f;
-    private final float height = 1.5f;
-
-    public Box(GameWorld world) {
-        super(world);
-        setPhysicsBody(createPhysicsBody());
-        setSprite(createSprite());
+        fixtureDef = new FixtureDef();
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.2f;
     }
 
-    Body createPhysicsBody() {
-
-        // 1. Creating the body definition.
-        BodyDef bDef = new BodyDef();
-        bDef.type = BodyDef.BodyType.DynamicBody;
-        bDef.position.set(0, 0);
-
-        // 2. Creating the physics body.
-        Body body = getGameWorld().getPhysics().createBody(bDef);
+    static Body createPhysicsBody(World world, float width, float height) {
+        // 1. Creating the physics body.
+        Body body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2.0f, height / 2.0f);
+        fixtureDef.shape = shape;
 
-        FixtureDef boxFixtureDef = new FixtureDef();
-        boxFixtureDef.shape = shape;
-        boxFixtureDef.density = 0.5f;
-        boxFixtureDef.friction = 0.4f;
-        boxFixtureDef.restitution = 0.2f;
-
-        body.createFixture(boxFixtureDef);
+        body.createFixture(fixtureDef);
         body.setGravityScale(-0.2f);
 
         return body;
     }
 
-    Sprite createSprite() {
+    static Sprite createSprite(float width, float height) {
         int sw = (int) (32 * width);
         int sh = (int) (32 * height);
 

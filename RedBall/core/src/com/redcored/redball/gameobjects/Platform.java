@@ -13,10 +13,7 @@ public class Platform extends GameObject {
     private final float width = 1.0f;
     private final float height = 20.0f;
 
-    public Platform(GameWorld world) {
-        super(world);
-        setPhysicsBody(createPhysicsBody());
-        setSprite(createSprite());
+    public Platform() {
     }
 
     Body createPhysicsBody() {

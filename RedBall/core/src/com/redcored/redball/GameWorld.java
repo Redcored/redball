@@ -1,16 +1,12 @@
 package com.redcored.redball;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.redcored.redball.gameobjects.Box;
+import com.redcored.redball.gameobjects.BoxTemplate;
 import com.redcored.redball.gameobjects.GameObject;
-import com.redcored.redball.gameobjects.Platform;
+import com.redcored.redball.gameobjects.GameObjectFactory;
 import com.redcored.redball.gameobjects.Player;
 import com.redcored.redball.util.UpdateTarget;
 
@@ -20,13 +16,13 @@ import com.redcored.redball.util.UpdateTarget;
 public class GameWorld implements UpdateTarget {
     private World physics;
     public Array<GameObject> objects = new Array<GameObject>();
-
+    GameObjectFactory factory;
     private float boxSpawn = 0.0f;
 
     public GameWorld() {
         physics = new World(new Vector2(0.0f, -3.81f), true);
         objects = new Array<GameObject>();
-
+        factory = new GameObjectFactory(this);
         generateDemoScene();
     }
 
@@ -34,7 +30,7 @@ public class GameWorld implements UpdateTarget {
         GameObject o;
         // Creating the objects at random positions.
         for (int i = 0; i < 5; i++) {
-            o = new Box(this);
+            o = factory.createBox(1f,1f);
 
             float randomX = MathUtils.random(-2.0f, 2.0f);
             float randomY = MathUtils.random(-2.0f, 2.0f);
@@ -43,7 +39,7 @@ public class GameWorld implements UpdateTarget {
             objects.add(o);
         }
 
-        o = new Player(this);
+        o = factory.createPlayer(0.6f);
         o.setPosition(new Vector2(0f, 3f));
         objects.add(o);
 
@@ -55,7 +51,7 @@ public class GameWorld implements UpdateTarget {
         boxSpawn += tickDuration;
 
         if (boxSpawn >= 1.5f) {
-            GameObject o = new Box(this);
+            GameObject o = factory.createBox(MathUtils.random(0.5f, 2.5f), MathUtils.random(0.5f, 2.5f));
             o.getPhysicsBody().applyForceToCenter(0, MathUtils.random(0f, 100f), true);
             float randomX = MathUtils.random(-4.0f, 4.0f);
             o.setPosition(new Vector2(randomX, -5f));
