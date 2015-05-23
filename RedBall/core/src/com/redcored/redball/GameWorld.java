@@ -1,5 +1,6 @@
 package com.redcored.redball;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -60,8 +61,18 @@ public class GameWorld implements UpdateTarget {
             boxSpawn -= MathUtils.random(0.5f, 1.5f);
         }
 
-        // Updating each object before the physics step.
-        for (GameObject o : objects) { o.update(tickDuration); }
+        // Updating each object before the physics step and removing escaped objects.
+        for (int i = 0; i < objects.size ; i++) {
+            GameObject o = objects.get(i);
+            if (o.getPosition().y > Constants.LEVEL_HEIGHT + 5) {
+                physics.destroyBody(o.getPhysicsBody());
+                objects.removeIndex(i);
+                Gdx.app.log("Object removed!", "Amount of objects: " + objects.size + " Amount of physics bodies: " +
+                physics.getBodyCount());
+            } else {
+                o.update(tickDuration);
+            }
+        }
 
         // Performing the physics step.
         physics.step(tickDuration, 6, 2);
