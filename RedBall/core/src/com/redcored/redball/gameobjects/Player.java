@@ -2,20 +2,15 @@ package com.redcored.redball.gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import com.redcored.redball.Constants;
-import com.redcored.redball.GameWorld;
 
 /**
  * Created by Ipismai on 22.5.2015.
  */
 public class Player extends GameObject {
     final float acceleration = 6f;
-    final Vector2 startPosition = new Vector2(0f, -5f);
+    final Vector2 startPosition = new Vector2(5f, 5f);
 
     public Player() {}
 
@@ -27,7 +22,7 @@ public class Player extends GameObject {
         }
 
         // Phone input.
-        Gdx.app.log("Accelerometer", " Value: " + Gdx.input.getAccelerometerX());
+        //Gdx.app.log("Accelerometer", " Value: " + Gdx.input.getAccelerometerX());
         this.getPhysicsBody().applyForceToCenter(-acceleration * Gdx.input.getAccelerometerX() / 2f, 0, true);
 
         if (Gdx.input.isTouched()) {
@@ -50,8 +45,8 @@ public class Player extends GameObject {
     private boolean isOutOfGameArea() {
         float x = this.getPosition().x;
         float y = this.getPosition().y;
-        return (x < -Constants.VIEWPORT_WIDTH / 2 || x > Constants.VIEWPORT_WIDTH / 2 ||
-                y < -Constants.VIEWPORT_HEIGHT / 2 || y > Constants.VIEWPORT_HEIGHT / 2);
+        return (x < -1 || x > Constants.LEVEL_WIDTH + 1 ||
+                y < -1 || y > Constants.LEVEL_HEIGHT + 1);
     }
 
     private void resetPlayer() {

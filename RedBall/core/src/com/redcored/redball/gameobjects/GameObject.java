@@ -13,7 +13,7 @@ import com.redcored.redball.util.UpdateTarget;
 
 /**
  * Created by Ipismai on 22.5.2015.
- *
+ * <p/>
  * A basic GameObject class that should be used to implement actual the actual objects of the game.
  * Contains a sprite and a physics body which are managed by the owner of this object.
  */
@@ -32,10 +32,12 @@ public class GameObject implements UpdateTarget {
     // Graphics data
     private Sprite sprite;
 
-    protected GameObject() {}
+    protected GameObject() {
+    }
 
     @Override
-    public void update(float updateStepLength) {}
+    public void update(float updateStepLength) {
+    }
 
     /**
      * Used by this object's owner to update it's member variables after a physics update.
@@ -49,6 +51,7 @@ public class GameObject implements UpdateTarget {
 
     /**
      * Sets the position of this object and it's physics, and updates the internal position history fields.
+     *
      * @param position New position of this object.
      */
     public void setPosition(Vector2 position) {
@@ -82,25 +85,24 @@ public class GameObject implements UpdateTarget {
         return physicsBody;
     }
 
-    public Sprite getSprite(float interpolation) {
-
-        float renderX = oldPosition.getPosition().x * (1.0f - interpolation) +
-                currentPosition.getPosition().x * interpolation - sprite.getWidth() / 2.0f;
-        float renderY = oldPosition.getPosition().y * (1.0f - interpolation) +
-                currentPosition.getPosition().y * interpolation - sprite.getHeight() / 2.0f;
-
-        // TODO: Improve rotation interpolation
-        float renderRotation = oldPosition.getRotation();
-                //* (1.0f - interpolation) +
-                //currentPosition.getRotation() * interpolation;
-
-        sprite.setPosition(renderX, renderY);
-        sprite.setRotation((float) Math.toDegrees(renderRotation));
-
-        return sprite;
-    }
+    public Sprite getSprite() { return sprite; }
 
     public GameWorld getGameWorld() {
         return gameWorld;
+    }
+
+    public Transform getRenderPosition(float alpha) {
+
+        float renderX = oldPosition.getPosition().x * (1.0f - alpha) +
+                currentPosition.getPosition().x * alpha;
+        float renderY = oldPosition.getPosition().y * (1.0f - alpha) +
+                currentPosition.getPosition().y * alpha;
+
+        // TODO: Improve rotation interpolation
+        float renderRotation = oldPosition.getRotation();
+        //* (1.0f - interpolation) +
+        //currentPosition.getRotation() * interpolation;
+
+        return new Transform(new Vector2(renderX, renderY), renderRotation);
     }
 }

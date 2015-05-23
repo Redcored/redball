@@ -19,6 +19,8 @@ public class GameWorld implements UpdateTarget {
     GameObjectFactory factory;
     private float boxSpawn = 0.0f;
 
+    GameObject player;
+
     public GameWorld() {
         physics = new World(new Vector2(0.0f, -3.81f), true);
         objects = new Array<GameObject>();
@@ -32,16 +34,15 @@ public class GameWorld implements UpdateTarget {
         for (int i = 0; i < 5; i++) {
             o = factory.createBox(1f,1f);
 
-            float randomX = MathUtils.random(-2.0f, 2.0f);
-            float randomY = MathUtils.random(-2.0f, 2.0f);
-            o.setPosition(new Vector2(randomX, randomY));
+            float randomX = MathUtils.random(0f, 10.0f);
+            o.setPosition(new Vector2(randomX, -2f));
 
             objects.add(o);
         }
 
-        o = factory.createPlayer(0.6f);
-        o.setPosition(new Vector2(0f, 3f));
-        objects.add(o);
+        player = factory.createPlayer(0.6f);
+        player.setPosition(new Vector2(5f, 5f));
+        objects.add(player);
 
     }
 
@@ -53,8 +54,8 @@ public class GameWorld implements UpdateTarget {
         if (boxSpawn >= 1.5f) {
             GameObject o = factory.createBox(MathUtils.random(0.5f, 2.5f), MathUtils.random(0.5f, 2.5f));
             o.getPhysicsBody().applyForceToCenter(0, MathUtils.random(0f, 100f), true);
-            float randomX = MathUtils.random(-4.0f, 4.0f);
-            o.setPosition(new Vector2(randomX, -5f));
+            float randomX = MathUtils.random(0f, Constants.LEVEL_WIDTH);
+            o.setPosition(new Vector2(randomX, -2f));
             objects.add(o);
             boxSpawn -= MathUtils.random(0.5f, 1.5f);
         }
@@ -76,6 +77,10 @@ public class GameWorld implements UpdateTarget {
 
     public Array<GameObject> getGameObjects() {
         return objects;
+    }
+
+    public GameObject getPlayer() {
+        return player;
     }
 
 }
